@@ -73,11 +73,15 @@
   @media (max-width: 860px) { .nav ul { display: none; } .wordmark { font-size: 22px; } }
 
   /* ---------- hero */
-  .hero { min-height: 100svh; display: grid; align-content: end; padding: 120px var(--gutter) clamp(40px, 8vh, 88px); }
-  .hero-inner { max-width: 760px; display: grid; gap: 26px; }
+  .hero { min-height: 100svh; display: grid; align-content: end; padding: 96px var(--gutter) clamp(32px, 7vh, 80px); }
+  .hero-inner { max-width: 760px; display: grid; gap: clamp(16px, 2.6vh, 26px); }
+  [data-in] { animation: rise 1.2s var(--ease) both; }
+  [data-in]:nth-child(2) { animation-delay: .12s; } [data-in]:nth-child(3) { animation-delay: .24s; } [data-in]:nth-child(4) { animation-delay: .36s; }
+  @keyframes rise { from { opacity: .35; transform: translateY(24px); } }
+  @media (prefers-reduced-motion: reduce) { [data-in] { animation: none; } }
   .eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--stone); display: flex; align-items: center; gap: 12px; }
   .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--cedar); }
-  .hero h1 { font: 400 clamp(52px, 8.4vw, 124px)/.92 var(--serif); letter-spacing: -.02em; }
+  .hero h1 { font: 400 clamp(46px, min(8.4vw, 12vh), 124px)/.92 var(--serif); letter-spacing: -.02em; }
   .hero h1 em { color: var(--cedar); }
   .hero .lede { max-width: 50ch; font-size: clamp(16px, 1.3vw, 18px); color: #d9d6ce; }
   .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -525,7 +529,6 @@
   // ---------------- GSAP: hero entrance + caption scrubs
   if (window.gsap && !reduce) {
     gsap.registerPlugin(ScrollTrigger);
-    gsap.from("[data-in]", { y: 28, opacity: 0, duration: 1.2, ease: "power3.out", stagger: 0.12, delay: 0.35 });
     $$(".cap").forEach((cap) => {
       gsap.fromTo(cap, { y: 60, opacity: 0.2 }, { y: 0, opacity: 1, ease: "none",
         scrollTrigger: { trigger: cap.parentElement, start: "top 85%", end: "top 30%", scrub: true } });
