@@ -27,6 +27,7 @@
     --ease: cubic-bezier(.2, .7, .1, 1);
   }
   *, *::before, *::after { box-sizing: border-box; }
+  [hidden] { display: none !important; }
   html { scroll-behavior: smooth; }
   @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
   body { background: var(--ground); color: var(--text); font: 400 16px/1.6 var(--sans); overflow-x: hidden; margin: 0; }
@@ -78,7 +79,7 @@
   .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--cedar); }
   .hero h1 { font: 400 clamp(46px, min(8.4vw, 12vh), 124px)/.92 var(--serif); letter-spacing: -.02em; }
   .hero h1 em { color: var(--cedar); }
-  .hero .lede { max-width: 50ch; font-size: clamp(16px, 1.3vw, 18px); color: #d9d6ce; }
+  .hero .facts { font: 400 13px/1.5 var(--mono); letter-spacing: .06em; color: #d9d6ce; font-variant-numeric: tabular-nums; }
   .hero .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
   .scroll-cue { position: absolute; right: var(--gutter); bottom: clamp(40px, 8vh, 88px); display: grid; justify-items: center; gap: 12px;
     font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--stone); writing-mode: vertical-rl; }
@@ -168,23 +169,42 @@
   @media (max-width: 960px) { .steps { grid-template-columns: 1fr 1fr; } .steps li:nth-child(3) { padding-left: 0; border-left: 0; } .steps li { border-bottom: 1px solid var(--line-bone); padding-bottom: 26px; } }
   @media (max-width: 560px) { .steps { grid-template-columns: 1fr; } .steps li + li { padding-left: 0; border-left: 0; } }
 
-  /* explore */
-  .explore { min-height: 100svh; position: relative; pointer-events: none; padding: 120px var(--gutter) 32px; display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px; }
-  .explore > * { pointer-events: auto; }
-  .explore-intro { align-self: start; max-width: 440px; background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--line); padding: 26px 28px; display: grid; gap: 14px; }
-  .explore-intro h2 { font: 400 clamp(36px, 3.6vw, 52px)/1 var(--serif); }
-  .explore-intro p { color: #d3d1c9; font-size: 15px; }
-  .panel { background: var(--glass); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--line); padding: 16px; display: grid; gap: 14px; width: min(360px, 100%); }
-  .panel .row { display: grid; gap: 8px; }
-  .panel .lbl { font: 500 10.5px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--stone); }
-  .chips { display: flex; flex-wrap: wrap; gap: 4px; }
-  .chip { appearance: none; border: 1px solid var(--line); background: transparent; color: var(--text); font: 500 12.5px/1 var(--sans); padding: 9px 12px; cursor: pointer; transition: background .2s, color .2s, border-color .2s; }
-  .chip:hover { border-color: var(--stone); }
-  .chip[aria-pressed="true"] { background: var(--bone); color: var(--ground); border-color: var(--bone); }
-  .control-note { font: 400 12px/1.4 var(--mono); color: var(--stone); }
-  body.orbiting #stage { pointer-events: auto; cursor: grab; }
-  body.orbiting #stage:active { cursor: grabbing; }
-  @media (max-width: 860px) { .explore { grid-template-columns: 1fr; align-content: space-between; } .panel { width: 100%; } }
+  /* enter band */
+  .enter { min-height: 90svh; display: grid; align-items: end; padding: 96px var(--gutter) clamp(40px, 8vh, 88px); }
+  .enter-inner { display: grid; gap: 22px; justify-items: start; max-width: 640px; }
+  .enter h2 { font: 400 clamp(52px, min(8vw, 12vh), 116px)/.92 var(--serif); letter-spacing: -.02em; }
+  .enter h2 em { color: var(--cedar); }
+
+  /* immersive mode */
+  .fade { position: fixed; inset: 0; z-index: 11; background: #0b0e0c; opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+  main, footer, .nav, .rail, .scrim { transition: opacity .6s var(--ease), visibility .6s; }
+  body.immersive main, body.immersive footer, body.immersive .nav, body.immersive .rail, body.immersive .scrim { opacity: 0; visibility: hidden; }
+  body.immersive #stage { pointer-events: auto; cursor: grab; touch-action: none; }
+  body.immersive #stage:active { cursor: grabbing; }
+  .hud { position: fixed; inset: 0; z-index: 12; pointer-events: none; display: grid; grid-template-rows: auto 1fr auto; gap: 16px;
+    padding: calc(env(safe-area-inset-top, 0px) + 18px) var(--gutter) calc(env(safe-area-inset-bottom, 0px) + 20px); }
+  .hud-top, .hud-bottom { pointer-events: auto; }
+  .hud-top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+  .hud-top .tools { display: flex; gap: 8px; align-items: center; }
+  .hud-hint { align-self: center; justify-self: center; font: 400 12.5px/1.4 var(--mono); color: var(--bone); background: rgba(11, 14, 12, .55);
+    padding: 10px 16px; letter-spacing: .04em; transition: opacity .6s; text-align: center; }
+  .hud-hint.gone { opacity: 0; }
+  .hud-bottom { display: grid; gap: 14px; justify-items: start; }
+  .room-name { display: grid; gap: 6px; text-shadow: 0 2px 24px rgba(0, 0, 0, .45); }
+  .room-name b { font: 400 clamp(34px, 4.4vw, 60px)/1 var(--serif); }
+  .room-name span { font: 400 12.5px/1 var(--mono); letter-spacing: .08em; color: var(--bone); opacity: .85; }
+  .rooms-bar { display: flex; gap: 4px; max-width: 100%; overflow-x: auto; scrollbar-width: none; background: rgba(11, 14, 12, .62);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--line); padding: 5px; }
+  .rooms-bar::-webkit-scrollbar { display: none; }
+  .chip { appearance: none; flex: none; border: 1px solid transparent; background: transparent; color: var(--text); font: 500 12.5px/1 var(--sans);
+    padding: 10px 13px; cursor: pointer; transition: background .2s, color .2s, border-color .2s; white-space: nowrap; }
+  .chip:hover { border-color: var(--line); }
+  .chip[aria-pressed="true"] { background: var(--bone); color: var(--ground); }
+  .seg { display: flex; background: rgba(11, 14, 12, .62); border: 1px solid var(--line); padding: 3px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .seg .chip { padding: 8px 12px; font-size: 12px; }
+  .hud .btn { background: rgba(11, 14, 12, .62); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-color: var(--line); }
+  .hud .btn:hover { background: var(--bone); color: var(--ground); }
+  @media (max-width: 560px) { .hud-top .wordmark { display: none; } .hud-top { justify-content: flex-end; } }
 
   /* enquire */
   .enq { display: grid; grid-template-columns: 1fr 1.2fr; gap: clamp(40px, 7vw, 120px); margin-top: 16px; }
@@ -232,7 +252,7 @@
     <li><a href="#residence">The Residence</a></li>
     <li><a href="#materials">Materials</a></li>
     <li><a href="#gallery">Gallery</a></li>
-    <li><a href="#explore">Explore in 3D</a></li>
+    <li><a href="#enter" data-dive>Step inside</a></li>
   </ul>
   <a class="btn small" href="#enquire">Private viewing</a>
 </header>
@@ -251,9 +271,9 @@
     <div class="hero-inner">
       <div class="eyebrow" data-in>Residence No. 01 · Available now</div>
       <h1 data-in>Cedar, stone &amp; a great deal of <em>quiet.</em></h1>
-      <p class="lede" data-in>A 4,650 sq ft forest home of floor-to-ceiling glass, stacked ledgestone and vertical cedar, set in a clearing of birch and pine. Designed and built by Arbor &amp; Stone.</p>
+      <p class="facts" data-in>4 bed · 4.5 bath · 4,650 sq ft · Forest clearing</p>
       <div class="ctas" data-in>
-        <a class="btn solid" href="#enquire">Arrange a private viewing</a>
+        <a class="btn solid" href="#enter" data-dive id="dive">Dive right in</a>
         <a class="btn" href="#ch-1">Take the tour ↓</a>
       </div>
     </div>
@@ -265,7 +285,7 @@
       <div class="cap">
         <div class="num">01 · Approach</div>
         <h2>Three volumes, one horizon.</h2>
-        <p>A single-storey garage wing and a low office pavilion bracket a two-storey glass core. Three stacked-stone piers mark the joins, so the house reads as a small village of forms rather than one block.</p>
+        <p>A glass core between two low wings, joined by stone.</p>
         <div class="fig">Street frontage ≈ 104 ft · 31.8 m</div>
       </div>
     </section>
@@ -273,7 +293,7 @@
       <div class="cap">
         <div class="num">02 · Rooflines</div>
         <h2>Roofs that float.</h2>
-        <p>Flat roofs step at three heights and cantilever past the walls, their soffits lined in the same cedar as the siding below. Deep eaves shade the summer glass and keep every line low against the treeline.</p>
+        <p>Cedar-lined eaves step at three heights and shade the glass.</p>
         <div class="fig">Eave projection up to 3 ft 7 in · 1.1 m</div>
       </div>
     </section>
@@ -281,7 +301,7 @@
       <div class="cap">
         <div class="num">03 · The clearing</div>
         <h2>A clearing, not a lot.</h2>
-        <p>The house sits among mature birch and pine. A curving paver drive holds back the entry until the last turn, and the garage faces the approach so the living rooms face only the forest.</p>
+        <p>Mature birch and pine on every side. The living rooms face only the forest.</p>
         <div class="fig">3-car garage · 850 sq ft</div>
       </div>
     </section>
@@ -289,7 +309,7 @@
       <div class="cap">
         <div class="num">04 · The plan</div>
         <h2>Cut at ten feet.</h2>
-        <p>Lift the upper floor away and the main floor reads clearly: primary suite to the west, the great room and dining at the centre, kitchen, pantry and study to the east, and a covered patio opening north.</p>
+        <p>Suite to the west, great room at the centre, kitchen and study to the east.</p>
         <div class="fig">Main floor 3,200 sq ft · Upper floor 1,450 sq ft</div>
       </div>
     </section>
@@ -297,7 +317,7 @@
       <div class="cap">
         <div class="num">05 · Great room</div>
         <h2>Twenty-two feet of glass.</h2>
-        <p>The living room rises the full two storeys to a wall of north-facing glass. A ledgestone fireplace column anchors it and carries on straight up through the roof as the chimney.</p>
+        <p>Two storeys of north light, anchored by a ledgestone fireplace.</p>
         <div class="fig">Clear height 22 ft 6 in · 6.85 m</div>
       </div>
     </section>
@@ -305,7 +325,7 @@
       <div class="cap">
         <div class="num">06 · Evening</div>
         <h2>Evenings belong outside.</h2>
-        <p>Glass doors open onto a covered patio with a sunken fire pit. It faces the forest rather than the street, and after dark the whole house glows like a lantern among the trees.</p>
+        <p>A covered patio and fire pit, facing the trees. After dark the house glows.</p>
         <div class="fig">Covered patio · 420 sq ft</div>
       </div>
     </section>
@@ -318,8 +338,6 @@
       <div class="res-grid">
         <div class="res-copy">
           <p class="big">Residence No. 01 is designed around one idea: that a house in the woods should make you notice the woods.</p>
-          <p>Expansive glass on every elevation brings the forest inside, while the palette stays deliberately short: cedar, stone, blackened frames and white oak. Rooms open into one another instead of down corridors, and the upper floor is arranged around an open-to-below loft so every bedroom shares the light of the great room.</p>
-          <p>Four bedrooms each have their own bath. There is a dedicated study, a family room and a walk-in pantry, and the three-car garage connects through a mud room.</p>
         </div>
         <dl class="specs">
           <div><dt>Bedrooms</dt><dd>4</dd></div>
@@ -359,7 +377,7 @@
           <div class="kicker">Materials</div>
           <h2 class="h2" style="margin-top:18px">Six materials, <em>nothing more.</em></h2>
         </div>
-        <p>A short palette, used consistently inside and out, is what makes the house feel calm. These swatches come from the same textures as the 3D model on this page.</p>
+        <p>The same short palette, inside and out.</p>
       </div>
       <div class="mats" id="mats">
         <div class="mat"><div class="mat-media"><div class="swatch" data-swatch="siding"></div></div><div class="mat-body"><b>Western red cedar</b><span>Vertical siding and soffits</span></div></div>
@@ -396,46 +414,19 @@
       <div class="kicker">How we build</div>
       <h2 class="h2" style="margin-top:18px">From clearing <em>to keys.</em></h2>
       <ol class="steps">
-        <li><h3>Site walk</h3><p>We walk your land with you and an arborist, mapping sun, slope and the trees worth keeping before anything is drawn.</p></li>
-        <li><h3>Design in 3D</h3><p>You tour the house in 3D, as on this page, and sign off on every room, window and material before ground is broken.</p></li>
-        <li><h3>Fixed-price build</h3><p>One team from foundation to finishes, working to a fixed price and a published schedule you can follow week by week.</p></li>
-        <li><h3>Handover</h3><p>A full walk-through, a house manual for every system, and a first-year visit each season.</p></li>
+        <li><h3>Site walk</h3><p>Your land, the sun, and the trees worth keeping.</p></li>
+        <li><h3>Design in 3D</h3><p>Walk every room in 3D before we break ground.</p></li>
+        <li><h3>Fixed-price build</h3><p>One team, one price, a schedule you can follow.</p></li>
+        <li><h3>Handover</h3><p>Keys, a house manual, and a visit every season.</p></li>
       </ol>
     </div>
   </section>
 
-  <section class="explore" id="explore" aria-label="Explore the model">
-    <div class="explore-intro">
-      <div class="kicker">Explore in 3D</div>
-      <h2>Walk it yourself.</h2>
-      <p>Choose a view, switch to dusk, or cut the house open to see each floor. Select <b>Take control</b> to orbit and zoom freely.</p>
-    </div>
-    <div class="panel" role="group" aria-label="Model controls">
-      <div class="row"><span class="lbl">View</span>
-        <div class="chips" id="x-views">
-          <button class="chip" data-view="front" aria-pressed="true">Front</button>
-          <button class="chip" data-view="corner" aria-pressed="false">Corner</button>
-          <button class="chip" data-view="rear" aria-pressed="false">Patio</button>
-          <button class="chip" data-view="aerial" aria-pressed="false">Aerial</button>
-          <button class="chip" data-view="plan" aria-pressed="false">Plan</button>
-          <button class="chip" data-view="living" aria-pressed="false">Great room</button>
-        </div>
-      </div>
-      <div class="row"><span class="lbl">Light</span>
-        <div class="chips" id="x-light">
-          <button class="chip" data-light="0" aria-pressed="true">Day</button>
-          <button class="chip" data-light="1" aria-pressed="false">Dusk</button>
-        </div>
-      </div>
-      <div class="row"><span class="lbl">Section</span>
-        <div class="chips" id="x-cut">
-          <button class="chip" data-cut="10" aria-pressed="true">Whole house</button>
-          <button class="chip" data-cut="6.6" aria-pressed="false">Upper floor</button>
-          <button class="chip" data-cut="3.1" aria-pressed="false">Main floor</button>
-        </div>
-      </div>
-      <button class="btn small" id="x-control" type="button" aria-pressed="false">Take control</button>
-      <p class="control-note" id="x-note">Drag to orbit · scroll to zoom · right-drag to pan</p>
+  <section class="enter" id="enter" aria-label="Step inside">
+    <div class="enter-inner">
+      <div class="eyebrow">Residence No. 01</div>
+      <h2>Step <em>inside.</em></h2>
+      <button class="btn solid" type="button" data-dive>Dive right in</button>
     </div>
   </section>
 
@@ -445,7 +436,7 @@
         <div class="enq-copy">
           <div class="kicker">Enquire</div>
           <h2 class="h2">See it in <em>person.</em></h2>
-          <p>Private viewings of Residence No. 01 are by appointment. If you have land of your own, we can also talk about building this design, or one drawn for your site.</p>
+          <p>Private viewings by appointment. Or build this design on your own land.</p>
           <div class="contact">
             <span id="email-text">hello@arborandstone.example</span>
             <button class="btn small" type="button" id="copy-email">Copy email address</button>
@@ -478,6 +469,35 @@
   <a class="wordmark" href="#top">Arbor <em>&amp;</em> Stone</a>
   <p>Residence No. 01 is shown as a design visualisation. Areas are approximate and furnishings are illustrative.</p>
 </footer>
+
+<div class="fade" id="fade" aria-hidden="true"></div>
+<div class="hud" id="hud" hidden>
+  <div class="hud-top">
+    <span class="wordmark">Arbor <em>&amp;</em> Stone</span>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Light">
+        <button class="chip" data-light="0" aria-pressed="true">Day</button>
+        <button class="chip" data-light="1" aria-pressed="false">Dusk</button>
+      </div>
+      <button class="btn small" type="button" id="exit">Back to site</button>
+    </div>
+  </div>
+  <p class="hud-hint gone" id="hint" aria-live="polite">Drag to look around · scroll to step closer</p>
+  <div class="hud-bottom">
+    <div class="room-name" aria-live="polite"><b id="room-name">Great room</b><span id="room-fig">22 ft 6 in to the ceiling</span></div>
+    <nav class="rooms-bar" id="rooms" aria-label="Rooms">
+      <button class="chip" data-room="front" aria-pressed="false">Front</button>
+      <button class="chip" data-room="entry" aria-pressed="false">Entry</button>
+      <button class="chip" data-room="great" aria-pressed="true">Great room</button>
+      <button class="chip" data-room="kitchen" aria-pressed="false">Kitchen</button>
+      <button class="chip" data-room="suite" aria-pressed="false">Primary suite</button>
+      <button class="chip" data-room="loft" aria-pressed="false">Loft</button>
+      <button class="chip" data-room="patio" aria-pressed="false">Patio</button>
+      <button class="chip" data-room="aerial" aria-pressed="false">Aerial</button>
+      <button class="chip" data-room="plan" aria-pressed="false">Floor plan</button>
+    </nav>
+  </div>
+</div>
 
 <script type="application/octet-stream" id="glb">{{GLB}}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
@@ -550,14 +570,19 @@
     { pos: B(18.2, 43, 3.2), tgt: B(15.5, 17, 3.8), cut: 10, d: 1 },
   ];
   K.forEach((k) => { const v = k.tgt.clone().sub(k.pos); k.dist = v.length(); k.dir = v.normalize(); });
-  const VIEWS = {
-    front:  { pos: B(15.5, -40, 3.2), tgt: B(15.5, 6, 3.8) },
-    corner: { pos: B(-24, -30, 9),    tgt: B(13, 8, 2.5) },
-    rear:   { pos: B(27, 42, 3.0),    tgt: B(15, 17, 3.6) },
-    aerial: { pos: B(55, -38, 42),    tgt: B(15, 10, 0) },
-    plan:   { pos: B(15.5, 10, 58),   tgt: B(15.5, 11, 0) },
-    living: { pos: B(19, 13, 1.9),    tgt: B(12, 19.5, 2.4) },
+  const ROOMS = {
+    front:   { label: "Front elevation", fig: "104 ft of frontage", pos: B(15.5, -40, 3.2), tgt: B(15.5, 6, 3.8) },
+    entry:   { label: "Entry", fig: "Glass doors · open-tread stair", pos: B(17, 3.4, 1.9), tgt: B(15.6, 12, 2.2), inside: true },
+    great:   { label: "Great room", fig: "22 ft 6 in to the ceiling", pos: B(18.6, 15.6, 1.9), tgt: B(12.5, 19.5, 3.0), inside: true },
+    kitchen: { label: "Kitchen", fig: "Walnut and quartz island", pos: B(24, 10.8, 1.9), tgt: B(28, 16.5, 1.3), inside: true },
+    suite:   { label: "Primary suite", fig: "A private west wing", pos: B(7.2, 13, 1.9), tgt: B(2.5, 17.5, 1.2), inside: true },
+    loft:    { label: "Loft", fig: "Overlooks the great room", pos: B(18.8, 6, 5.5), tgt: B(15, 15, 4.8), inside: true },
+    patio:   { label: "Covered patio", fig: "420 sq ft · fire pit", pos: B(18.2, 34, 2.4), tgt: B(16, 17, 3.4) },
+    aerial:  { label: "The clearing", fig: "Birch and pine on every side", pos: B(55, -38, 42), tgt: B(15, 10, 0) },
+    plan:    { label: "Main floor plan", fig: "3,200 sq ft", pos: B(15.5, 10, 58), tgt: B(15.5, 11, 0), cut: 3.1 },
   };
+  // "Dive right in": up the drive, through the front doors, past the stair, into the great room
+  const DIVE = [B(15.5, -16, 2.4), B(17, -3, 1.95), B(17, 3.4, 1.9), B(18.1, 11, 1.9), ROOMS.great.pos];
   const INTERIOR_LIGHTS = [[16.5,18,6.6],[17,11.5,3.2],[26,14,3.4],[26,6.5,3.4],[4,16,3.2],[16.8,6,3.2],
                            [12.5,18,6.6],[20.5,18,6.6],[12.5,7,6.6],[20.7,7,6.6],[16,23.6,3.0]];
 
@@ -795,69 +820,119 @@
     tour.idx = raw < 0.5 ? i : i + 1;
   }
 
-  // ---------------- explore mode
-  const explore = $("#explore");
-  const X = { view: "front", d: 0, cut: 10, active: false, orbit: false };
-  let tween = null;
-  function flyTo(name) {
-    X.view = name;
-    const v = VIEWS[name];
-    $$("#x-views .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.view === name)));
-    controls.maxPolarAngle = name === "living" ? Math.PI * 0.62 : Math.PI * 0.495;
-    if (reduce) { camera.position.copy(v.pos); controls.target.copy(v.tgt); return; }
-    tween = { t0: performance.now(), dur: 1500, p0: camera.position.clone(), q0: controls.target.clone(), p1: v.pos, q1: v.tgt };
+  // ---------------- immersive mode
+  const hud = $("#hud"), fadeEl = $("#fade"), hint = $("#hint");
+  const I = { on: false, room: "great", d: 0, cut: 10, flight: null, tween: null };
+  const fade = (v) => new Promise((res) => { fadeEl.style.opacity = v; setTimeout(res, reduce ? 0 : 360); });
+  let hintTimer;
+  const showHint = () => { hint.classList.remove("gone"); clearTimeout(hintTimer); hintTimer = setTimeout(() => hint.classList.add("gone"), 5000); };
+  controls.addEventListener("start", () => { hint.classList.add("gone"); I.tween = null; });
+
+  const baseFov = () => (camera.aspect < 0.9 ? 58 : 38);
+  const insideFov = () => (camera.aspect < 0.9 ? 80 : 64);
+  function setFov(f) { camera.fov = f; camera.updateProjectionMatrix(); }
+  function configure(r) {
+    setFov(r.inside ? insideFov() : baseFov());
+    if (r.inside) {
+      Object.assign(controls, { minDistance: 0.05, maxDistance: 3, enablePan: false, minPolarAngle: 0.15, maxPolarAngle: Math.PI * 0.85, rotateSpeed: 0.5 });
+    } else {
+      Object.assign(controls, { minDistance: 2, maxDistance: 160, enablePan: true, minPolarAngle: 0, maxPolarAngle: Math.PI * 0.495, rotateSpeed: 1 });
+    }
   }
-  $$("#x-views .chip").forEach((c) => c.addEventListener("click", () => flyTo(c.dataset.view)));
-  $$("#x-light .chip").forEach((c) => c.addEventListener("click", () => {
-    X.d = +c.dataset.light;
-    $$("#x-light .chip").forEach((o) => o.setAttribute("aria-pressed", String(o === c)));
-  }));
-  $$("#x-cut .chip").forEach((c) => c.addEventListener("click", () => {
-    X.cut = +c.dataset.cut;
-    $$("#x-cut .chip").forEach((o) => o.setAttribute("aria-pressed", String(o === c)));
-  }));
-  const ctlBtn = $("#x-control");
-  function setOrbit(on) {
-    X.orbit = on;
-    controls.enabled = on;
-    document.body.classList.toggle("orbiting", on);
-    canvas.style.touchAction = on ? "none" : "auto";
-    ctlBtn.textContent = on ? "Done exploring" : "Take control";
-    ctlBtn.setAttribute("aria-pressed", String(on));
+  function aim(r) {
+    // inside: orbit about a point just ahead of the eye, which reads as looking around
+    if (!r.inside) return r.tgt.clone();
+    return r.pos.clone().add(r.tgt.clone().sub(r.pos).normalize().multiplyScalar(0.35));
   }
-  ctlBtn.addEventListener("click", () => setOrbit(!X.orbit));
-  controls.addEventListener("start", () => { tween = null; $$("#x-views .chip").forEach((c) => c.setAttribute("aria-pressed", "false")); });
+  function label(name) {
+    const r = ROOMS[name];
+    $("#room-name").textContent = r.label;
+    $("#room-fig").textContent = r.fig;
+    $$("#rooms .chip").forEach((c) => c.setAttribute("aria-pressed", String(c.dataset.room === name)));
+  }
+  function place(name) {
+    const r = ROOMS[name];
+    configure(r);
+    camera.position.copy(r.pos);
+    controls.target.copy(aim(r));
+    camera.lookAt(controls.target);
+    controls.update();
+  }
+  async function goRoom(name) {
+    if (I.flight || name === I.room && !I.tween) return;
+    const from = ROOMS[I.room], to = ROOMS[name];
+    I.room = name; I.cut = to.cut || 10; label(name);
+    if (reduce || from.inside || to.inside) {
+      I.tween = null;
+      await fade(1); place(name); await fade(0);
+    } else {
+      configure(to);
+      I.tween = { t0: performance.now(), dur: 1600, p0: camera.position.clone(), q0: controls.target.clone(), p1: to.pos, q1: aim(to) };
+    }
+  }
+  $$("#rooms .chip").forEach((c) => c.addEventListener("click", () => goRoom(c.dataset.room)));
+  $$(".hud [data-light]").forEach((c) => c.addEventListener("click", () => {
+    I.d = +c.dataset.light;
+    $$(".hud [data-light]").forEach((o) => o.setAttribute("aria-pressed", String(o === c)));
+  }));
+
+  async function enter() {
+    if (I.on) return;
+    I.on = true; I.room = "great"; I.cut = 10; I.tween = null;
+    I.d = cur.d > 0.5 ? 1 : 0;
+    $$(".hud [data-light]").forEach((o) => o.setAttribute("aria-pressed", String(+o.dataset.light === I.d)));
+    label("great");
+    document.documentElement.style.overflow = "hidden";
+    const farDown = scrollY > innerHeight * 0.4;
+    if (farDown) await fade(1);
+    document.body.classList.add("immersive");
+    hud.hidden = false;
+    controls.enabled = false;
+    if (farDown) { camera.position.copy(B(15.5, -34, 2.8)); camera.lookAt(B(15.5, 6, 3.6)); }
+    if (reduce) { place("great"); await fade(0); controls.enabled = true; showHint(); $("#exit").focus(); return; }
+    const pts = [camera.position.clone(), ...DIVE];
+    I.flight = { t0: performance.now() + (farDown ? 250 : 0), dur: 6200, curve: new THREE.CatmullRomCurve3(pts, false, "centripetal"), end: ROOMS.great.tgt };
+    if (farDown) fade(0);
+  }
+  async function exit() {
+    if (!I.on) return;
+    await fade(1);
+    I.on = false; I.flight = null; I.tween = null;
+    hud.hidden = true;
+    controls.enabled = false;
+    setFov(baseFov());
+    document.body.classList.remove("immersive");
+    document.documentElement.style.overflow = "";
+    tourAt(scrollY);
+    cur.pos.copy(tour.pos); cur.dir.copy(tour.dir); cur.dist = tour.dist; cur.cut = tour.cut; cur.d = tour.d;
+    await fade(0);
+    const back = scrollY > innerHeight * 0.4 ? $("#enter [data-dive]") : $("#dive");
+    back && back.focus({ preventScroll: true });
+  }
+  $$("[data-dive]").forEach((el) => el.addEventListener("click", (e) => { e.preventDefault(); enter(); }));
+  $("#exit").addEventListener("click", exit);
+  addEventListener("keydown", (e) => { if (e.key === "Escape") exit(); });
 
   // which region is on screen
   let stageNeeded = true;
   const journeyEnd = () => $("#residence").offsetTop;
-  new IntersectionObserver((es) => es.forEach((e) => {
-    const on = e.intersectionRatio > 0.35;
-    if (on && !X.active) {
-      X.active = true;
-      camera.position.copy(tour.pos); controls.target.copy(tour.pos).addScaledVector(tour.dir, tour.dist);
-      flyTo(X.view);
-    } else if (!on && X.active) {
-      X.active = false; setOrbit(false); tween = null;
-    }
-  }), { threshold: [0, 0.35, 0.6] }).observe(explore);
-
+  const band = $("#enter");
   function onScroll() {
     const y = scrollY;
     nav.classList.toggle("solid", y > innerHeight * 0.55);
     const inFilm = y > innerHeight * 0.5 && y < journeyEnd() - innerHeight * 0.6;
     rail.classList.toggle("off", !inFilm);
-    const ex = explore.getBoundingClientRect();
-    stageNeeded = y < journeyEnd() || (ex.bottom > 0 && ex.top < innerHeight);
-    $("#scrim").style.opacity = String(clamp(1 - y / (innerHeight * 0.9), 0.25, 1) * (X.active ? 0 : 1));
+    const b = band.getBoundingClientRect();
+    stageNeeded = y < journeyEnd() || (b.bottom > 0 && b.top < innerHeight);
+    $("#scrim").style.opacity = String(clamp(1 - y / (innerHeight * 0.9), 0.25, 1));
   }
   addEventListener("scroll", onScroll, { passive: true });
 
   function resize() {
     renderer.setSize(innerWidth, innerHeight, false);
     camera.aspect = innerWidth / innerHeight;
-    camera.fov = camera.aspect < 0.9 ? 58 : 38;
-    camera.updateProjectionMatrix();
+    const inside = I.on && !I.flight && ROOMS[I.room].inside;
+    setFov(inside ? insideFov() : baseFov());
     measure(); onScroll();
   }
   addEventListener("resize", resize);
@@ -868,22 +943,32 @@
   const cur = { pos: K[0].pos.clone(), dir: K[0].dir.clone(), dist: K[0].dist, cut: 10, d: K[0].d };
   const look = new THREE.Vector3();
   let last = performance.now();
-  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  const ease = (t) => 0.5 - 0.5 * Math.cos(Math.PI * t);
   renderer.setAnimationLoop((now) => {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
-    if (!stageNeeded) return;
+    if (!stageNeeded && !I.on) return;
     const k = reduce ? 1 : 1 - Math.exp(-dt * 5);
 
-    if (X.active) {
-      if (tween) {
-        const p = Math.min(1, (now - tween.t0) / tween.dur), e = ease(p);
-        camera.position.lerpVectors(tween.p0, tween.p1, e);
-        controls.target.lerpVectors(tween.q0, tween.q1, e);
-        if (p === 1) tween = null;
+    if (I.on) {
+      if (I.flight) {
+        const f = I.flight, p = clamp((now - f.t0) / f.dur), e = ease(p);
+        camera.position.copy(f.curve.getPointAt(e));
+        look.copy(f.curve.getPointAt(Math.min(1, e + 0.06)));
+        look.lerp(f.end, smooth(clamp((e - 0.62) / 0.38)));
+        camera.lookAt(look);
+        setFov(THREE.MathUtils.lerp(baseFov(), insideFov(), smooth(clamp((e - 0.45) / 0.55))));
+        if (p === 1) { I.flight = null; place("great"); controls.enabled = true; showHint(); }
+      } else {
+        if (I.tween) {
+          const t = I.tween, p = Math.min(1, (now - t.t0) / t.dur), e = ease(p);
+          camera.position.lerpVectors(t.p0, t.p1, e);
+          controls.target.lerpVectors(t.q0, t.q1, e);
+          if (p === 1) I.tween = null;
+        }
+        controls.update();
       }
-      controls.update();
-      cur.cut += (X.cut - cur.cut) * (reduce ? 1 : 1 - Math.exp(-dt * 4));
-      cur.d += (X.d - cur.d) * (reduce ? 1 : 1 - Math.exp(-dt * 3));
+      cur.cut += (I.cut - cur.cut) * (reduce ? 1 : 1 - Math.exp(-dt * 4));
+      cur.d += (I.d - cur.d) * (reduce ? 1 : 1 - Math.exp(-dt * 3));
     } else {
       tourAt(scrollY);
       cur.pos.lerp(tour.pos, k);

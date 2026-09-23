@@ -2,7 +2,7 @@
 
 Marketing site for a luxury home builder, built around an interactive 3D model of **Residence No. 01**, a 4,650 sq ft modern forest home in cedar, stone and glass.
 
-Scrolling flies the camera along the driveway, around the corner, above the trees, down through a section cut of the main floor, into the double-height great room at dusk, and out onto the patio. Below the tour are the specs, materials, a render gallery, the build process, a free-explore 3D section and an enquiry form.
+The opening screen offers two ways in. **Dive right in** flies up the drive, through the front doors and into the great room, then hands over control with a room bar (Entry, Great room, Kitchen, Primary suite, Loft, Patio, plus exterior and floor-plan views) and a day/dusk switch. **Take the tour** is the scroll story, where the camera flies along the driveway, around the corner, above the trees, down through a section cut of the main floor, into the double-height great room at dusk, and out onto the patio. Below the tour are the specs, materials, a render gallery, the build process, a "Step inside" band and an enquiry form.
 
 ## Structure
 
